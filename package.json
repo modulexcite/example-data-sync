@@ -1,0 +1,25 @@
+{
+  "name": "example-data-sync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "DEBUG=app:* node index",
+    "lint": "eslint --ext .js,.jsx ."
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "1.12.0",
+    "debug": "2.1.1",
+    "diskdb": "0.1.14",
+    "express": "4.11.2",
+    "immutable": "3.6.2",
+    "object-assign": "2.0.0",
+    "uuid": "2.0.1"
+  },
+  "devDependencies": {
+    "eslint": "0.15.0"
+  }
+}
