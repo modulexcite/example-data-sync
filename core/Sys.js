@@ -29,6 +29,9 @@ Sys.prototype.start = function() {
       useStore: function(store) {
         stores[service] = store;
       },
+      useStatic: function(route, path) {
+        server.use('/' + service + route, express.static(path));
+      },
       handleHttp: function(method, route, thing) {
         router[method.toLowerCase()](route, thing.handler.bind(null, pub));
       },
@@ -58,6 +61,7 @@ Sys.prototype.print = function() {
     console.log('Service: ' + service);
     this._services[service]({
       useStore: function() {},
+      useStatic: function() {},
       handleHttp: function(method, route, thing) {
         if (route === '/') {
           route = '';

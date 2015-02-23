@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "DEBUG=app:* node index",
+    "dev": "DEBUG=app:* node index & webpack --watch --devtool eval-source-map",
     "lint": "eslint --ext .js,.jsx ."
   },
   "author": "",
@@ -16,8 +16,12 @@
     "diskdb": "0.1.14",
     "express": "4.11.2",
     "immutable": "3.6.2",
+    "jsx-loader": "0.12.2",
+    "node-jsx": "0.12.4",
     "object-assign": "2.0.0",
-    "uuid": "2.0.1"
+    "react": "0.12.2",
+    "uuid": "2.0.1",
+    "webpack": "1.5.3"
   },
   "devDependencies": {
     "eslint": "0.15.0"
