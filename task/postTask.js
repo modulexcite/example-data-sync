@@ -7,13 +7,15 @@ function events() {
   ];
 }
 
-function postTask(pub, req, res) {
-  debug('POST /task ' + JSON.stringify(req.body));
-  pub('app', new lang.TaskCreated({
-    eventId: lang.newEventId(),
-    taskId: lang.newTaskId()
-  }));
-  res.sendStatus(200);
+function postTask(pub) {
+  return function(req, res) {
+    debug('POST /task ' + JSON.stringify(req.body));
+    pub('app', new lang.TaskCreated({
+      eventId: lang.newEventId(),
+      taskId: lang.newTaskId()
+    }));
+    res.sendStatus(200);
+  };
 }
 
 module.exports = {

@@ -19,7 +19,7 @@ var Home = React.createClass({
 });
 
 module.exports = {
-  handler: function(pub, req, res) {
-    res.send(html(Home));
+  handler: function() {
+    return function(req, res) { res.send(html(Home)); };
   }
 };

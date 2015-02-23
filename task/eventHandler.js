@@ -7,14 +7,16 @@ function events() {
   ];
 }
 
-function handleEvent(store, event) {
-  if (event instanceof lang.TaskCreated) {
-    debug('handle event', event.get('eventType'), JSON.stringify(event.toJS()));
-    store[event.get('taskId')] = {};
-  }
+function handler(pub, store) {
+  return function(event) {
+    if (event instanceof lang.TaskCreated) {
+      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      store[event.get('taskId')] = {};
+    }
+  };
 }
 
 module.exports = {
-  handler: handleEvent,
+  handler: handler,
   events: events
 };

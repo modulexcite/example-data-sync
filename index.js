@@ -6,5 +6,9 @@ sys.addService('task', require('./task'));
 sys.addService('file', require('./file'));
 sys.addService('app', require('./app'));
 
-sys.start();
-// sys.print();
+var command = process.argv[process.argv.length - 1];
+if (command === 'print') {
+  sys.print();
+} else {
+  sys.start();
+}

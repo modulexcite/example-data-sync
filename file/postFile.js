@@ -3,35 +3,47 @@ var debug = require('debug')('app:file:postFile');
 
 function events() {
   return [
-    lang.FileCreated
+    lang.FileUploaded
   ];
 }
 
-function postFile(pub, req, res) {
-  var file = req.files['file'];
-  debug('POST /file ' + JSON.stringify(file));
-  var fileId = file.name.replace('.' + file.extension, '');
-  var fileMeta = {
-    name: file.originalname,
-    encoding: file.encoding,
-    mimetype: file.mimetype,
-    extension: file.extension,
-    size: file.size
+function postFile(pub, store) {
+  return function(req, res, next) {
+    var file = req.files['file'];
+    if (!file) {
+      next();
+      return;
+    }
+    debug('POST /file ' + JSON.stringify(file));
+    var fileId = file.name.replace('.' + file.extension, '');
+    var fileMeta = new lang.FileMeta({
+      name: file.originalname,
+      encoding: file.encoding,
+      mimetype: file.mimetype,
+      extension: file.extension,
+      size: file.size
+    });
+
+    store.addFileMeta(fileId, fileMeta, function(err) {
+      if (err) {
+        res.status(500).end();
+        return;
+      }
+      pub('app', new lang.FileUploaded({
+        eventId: lang.newEventId(),
+        fileId: fileId,
+        fileMeta: fileMeta
+      }));
+
+      var redirect = req.query.redirect;
+      if (redirect) {
+        redirect = redirect + '?fileId=' + fileId;
+        res.redirect(303, redirect);
+      } else {
+        res.send('Upload complete. fileId = ' + fileId);
+      }
+    });
   };
-
-  pub('app', new lang.FileUploaded({
-    eventId: lang.newEventId(),
-    fileId: fileId,
-    fileMeta: fileMeta
-  }));
-
-  var redirect = req.query.redirect;
-  if (redirect) {
-    redirect = redirect + '?fileId=' + fileId;
-    res.redirect(303, redirect);
-  } else {
-    res.send('Upload complete');
-  }
 }
 
 module.exports = {

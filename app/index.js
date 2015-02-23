@@ -9,8 +9,8 @@ module.exports = function(sys) {
     path.join(__dirname, '..', 'build')
   ));
   sys.handleHttp('GET', '/', {
-    handler: function(pub, req, res) {
-      res.send(html);
+    handler: function() {
+      return function(req, res) { res.send(html); };
     }
   });
 };

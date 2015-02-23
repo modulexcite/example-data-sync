@@ -38,13 +38,13 @@ Sys.prototype.start = function() {
         }
       },
       handleHttp: function(method, route, controller) {
-        router[method.toLowerCase()](route, controller.handler.bind(null, pub));
+        router[method.toLowerCase()](route, controller.handler(pub, stores[service]));
       },
       handleEvents: function(channel, controller) {
         if (!stores[service]) {
           debug('WARNING: Added event handler but no store for service ' + service);
         }
-        bus.subscribe(channel, controller.handler.bind(null, stores[service]));
+        bus.subscribe(channel, controller.handler(pub, stores[service]));
       }
     });
     server.use('/' + service, router);
