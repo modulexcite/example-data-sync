@@ -9,7 +9,10 @@ var Home = React.createClass({
   render: function() {
     return (
       <div>
-        <p>File upload</p>
+        <form method="POST" encType="multipart/form-data">
+          <input type="file" name="file" />
+          <input type="submit" value="Upload" />
+        </form>
       </div>
     );
   }
@@ -18,6 +21,5 @@ var Home = React.createClass({
 module.exports = {
   handler: function(pub, req, res) {
     res.send(html(Home));
-  },
-  events: function() { return []; }
+  }
 };

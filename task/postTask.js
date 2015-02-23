@@ -8,7 +8,7 @@ function events() {
 }
 
 function postTask(pub, req, res) {
-  debug('POST', '/task', JSON.stringify(req.body));
+  debug('POST /task ' + JSON.stringify(req.body));
   pub('app', new lang.TaskCreated({
     eventId: lang.newEventId(),
     taskId: lang.newTaskId()

@@ -8,7 +8,7 @@ function Bus() {
 }
 
 Bus.prototype.publish = function(channel, event) {
-  debug('publish', channel, JSON.stringify(event));
+  debug('publish ' + channel + ' ' + JSON.stringify(event));
   this._ensureChannel(channel);
   this._channels[channel].push(event);
   this._emitter.emit(channel, event);

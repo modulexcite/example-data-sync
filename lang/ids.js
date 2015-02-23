@@ -8,7 +8,12 @@ function newTaskId() {
   return id.newId();
 }
 
+function newFileId() {
+  return id.newId();
+}
+
 module.exports = {
   newEventId: newEventId,
-  newTaskId: newTaskId
+  newTaskId: newTaskId,
+  newFileId: newFileId
 };

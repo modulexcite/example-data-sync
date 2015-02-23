@@ -29,17 +29,22 @@ Sys.prototype.start = function() {
       useStore: function(store) {
         stores[service] = store;
       },
-      useStatic: function(route, path) {
-        server.use('/' + service + route, express.static(path));
+      useMiddleware: function(route, middleware) {
+        if (!middleware) {
+          middleware = route;
+          router.use(middleware);
+        } else {
+          router.use(route, middleware);
+        }
       },
-      handleHttp: function(method, route, thing) {
-        router[method.toLowerCase()](route, thing.handler.bind(null, pub));
+      handleHttp: function(method, route, controller) {
+        router[method.toLowerCase()](route, controller.handler.bind(null, pub));
       },
-      handleEvents: function(channel, thing) {
+      handleEvents: function(channel, controller) {
         if (!stores[service]) {
           debug('WARNING: Added event handler but no store for service ' + service);
         }
-        bus.subscribe(channel, thing.handler.bind(null, stores[service]));
+        bus.subscribe(channel, controller.handler.bind(null, stores[service]));
       }
     });
     server.use('/' + service, router);
@@ -61,19 +66,19 @@ Sys.prototype.print = function() {
     console.log('Service: ' + service);
     this._services[service]({
       useStore: function() {},
-      useStatic: function() {},
-      handleHttp: function(method, route, thing) {
+      useMiddleware: function() {},
+      handleHttp: function(method, route, controller) {
         if (route === '/') {
           route = '';
         }
         httpEndpoints.push(method + ' /' + service + route);
-        var events = thing.events();
+        var events = controller.events ? controller.events() : [];
         for (i = 0; i < events.length; i++) {
           eventsProduced.push(events[i].prototype._defaultValues.eventType);
         }
       },
-      handleEvents: function(channel, thing) {
-        var events = thing.events();
+      handleEvents: function(channel, controller) {
+        var events = controller.events ? controller.events() : [];
         for (i = 0; i < events.length; i++) {
           eventsConsumed.push(events[i].prototype._defaultValues.eventType);
         }
