@@ -6,7 +6,9 @@ var TaskCreated = Immutable.Record({
   timestamp: null,
   taskId: null,
   userId: null,
-  bucketId: null
+  bucketId: null,
+  taskType: null,
+  taskMeta: null
 });
 
 var FileUploaded = Immutable.Record({
