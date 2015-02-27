@@ -20,6 +20,7 @@
     "multer": "0.1.8",
     "node-jsx": "0.12.4",
     "object-assign": "2.0.0",
+    "query-string": "1.0.0",
     "react": "0.12.2",
     "superagent": "0.21.0",
     "uuid": "2.0.1",
