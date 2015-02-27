@@ -37,7 +37,8 @@ function postFile(pub, store) {
 
       var redirect = req.query.redirect;
       if (redirect) {
-        redirect = redirect + '?fileId=' + fileId;
+        // Assumes redirect already has a query string
+        redirect = redirect + '&fileId=' + fileId;
         res.redirect(303, redirect);
       } else {
         res.send('Upload complete. fileId = ' + fileId);

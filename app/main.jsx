@@ -8,13 +8,15 @@ var api = new Api({host: 'http://localhost:3000'});
 var NewSyncTask = React.createClass({
   getInitialState: function() {
     return {
-      task: null
+      task: null,
+      file: null
     };
   },
 
   componentWillMount: function() {
     var self = this;
     var qs = queryString.parse(window.location.search);
+
     var taskId = qs.taskId;
     if (taskId) {
       this.setState({task: Immutable.Map({taskId: taskId})});
@@ -26,6 +28,19 @@ var NewSyncTask = React.createClass({
         self.setState({task: task});
       });
     }
+
+    var fileId = qs.fileId;
+    if (fileId) {
+      this.setState({file: Immutable.Map({fileId: fileId})});
+      api.getFileMeta(fileId, function(err, fileMeta) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        var file = self.state.file.set('meta', fileMeta);
+        self.setState({file: file});
+      });
+    }
   },
 
   render: function() {
@@ -33,6 +48,7 @@ var NewSyncTask = React.createClass({
       <div>
         <h1>New sync task</h1>
         {this.renderNewTask()}
+        {this.renderUploadFile()}
       </div>
     );
   },
@@ -84,6 +100,30 @@ var NewSyncTask = React.createClass({
       }
       self.setState({task: task});
     });
+  },
+
+  renderUploadFile: function() {
+    var task = this.state.task;
+    if (!task) {
+      return null;
+    }
+
+    var file = this.state.file;
+    if (file) {
+      return (
+        <div>
+          <p>File Id: <strong>{file.get('fileId')}</strong></p>
+          <p>File Name: <strong>{file.getIn(['meta', 'name'])}</strong></p>
+          <p>File size: <strong>{file.getIn(['meta', 'size'])}</strong></p>
+        </div>
+      );
+    }
+
+    var href = 'http://localhost:3000/file?';
+    href += queryString.stringify({
+      redirect: location.href + '?taskId=' + task.get('taskId')
+    });
+    return <p><a href={href}>Click here to upload file</a></p>;
   }
 });
 
