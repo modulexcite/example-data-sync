@@ -3,7 +3,7 @@ var debug = require('debug')('app:task:getTask');
 function getTask(pub, store) {
   return function(req, res) {
     var taskId = req.params.taskId;
-    debug('GET /task/:taskId/meta ' + taskId);
+    debug('GET /task/:taskId ' + taskId);
 
     store.getTask(taskId, function(err, task) {
       if (err) {
@@ -13,8 +13,8 @@ function getTask(pub, store) {
       if (!task) {
         res.status(404).send({
           error: {
-            name: 'FileDoesNotExist',
-            message: 'No file found for given file id'
+            name: 'TaskDoesNotExist',
+            message: 'No task found for given task id'
           }
         });
         return;

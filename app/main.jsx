@@ -22,7 +22,6 @@ var NewSyncTask = React.createClass({
       this.setState({task: Immutable.Map({taskId: taskId})});
       api.getTask(taskId, function(err, task) {
         if (err) {
-          console.log(err);
           return;
         }
         self.setState({task: task});
@@ -34,11 +33,19 @@ var NewSyncTask = React.createClass({
       this.setState({file: Immutable.Map({fileId: fileId})});
       api.getFileMeta(fileId, function(err, fileMeta) {
         if (err) {
-          console.log(err);
           return;
         }
         var file = self.state.file.set('meta', fileMeta);
         self.setState({file: file});
+      });
+    }
+
+    if (taskId && fileId) {
+      api.setTaskFile(taskId, fileId, function(err, task) {
+        if (err) {
+          return;
+        }
+        self.setState({task: task});
       });
     }
   },
@@ -47,13 +54,14 @@ var NewSyncTask = React.createClass({
     return (
       <div>
         <h1>New sync task</h1>
-        {this.renderNewTask()}
+        {this.renderCreateTask()}
         {this.renderUploadFile()}
+        {this.renderStartTask()}
       </div>
     );
   },
 
-  renderNewTask: function() {
+  renderCreateTask: function() {
     var task = this.state.task;
     if (task) {
       return (
@@ -95,7 +103,6 @@ var NewSyncTask = React.createClass({
     });
     api.createTask(task, function(err, task) {
       if (err) {
-        console.log(err);
         return;
       }
       self.setState({task: task});
@@ -124,6 +131,20 @@ var NewSyncTask = React.createClass({
       redirect: location.href + '?taskId=' + task.get('taskId')
     });
     return <p><a href={href}>Click here to upload file</a></p>;
+  },
+
+  renderStartTask: function() {
+    var task = this.state.task;
+    if (!(task && task.getIn(['meta', 'fileId']))) {
+      return null;
+    }
+
+    return <p><button onClick={this.handleStartTask}>Start task</button></p>;
+  },
+
+  handleStartTask: function(e) {
+    e.preventDefault();
+    console.log('start task');
   }
 });
 
