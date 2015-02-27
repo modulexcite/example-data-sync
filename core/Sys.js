@@ -4,8 +4,8 @@ var debug = require('debug')('app:sys');
 var Bus = require('./Bus');
 
 function Sys() {
-  this._server = null;
-  this._bus = null;
+  this._server = express();
+  this._bus = new Bus();
   this._services = {};
   this._routers = {};
   this._stores = {};
@@ -16,10 +16,10 @@ Sys.prototype.addService = function(name, service) {
 };
 
 Sys.prototype.start = function() {
-  var bus = this._bus = new Bus();
+  var bus = this._bus;
   var pub = bus.publish.bind(bus);
   var stores = this._stores;
-  var server = this._server = express();
+  var server = this._server;
   server.use(bodyParser.json());
   var router;
   for (var service in this._services) {
@@ -52,6 +52,12 @@ Sys.prototype.start = function() {
   var port = process.env.PORT || 3000;
   server.listen(port);
   debug('Listening on port ' + port);
+};
+
+Sys.prototype.redirect = function(from, to) {
+  this._server.get(from, function(req, res) {
+    res.redirect(to);
+  });
 };
 
 Sys.prototype.print = function() {
