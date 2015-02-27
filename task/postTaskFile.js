@@ -1,3 +1,4 @@
+var lang = require('../lang');
 var debug = require('debug')('app:task:postTaskFile');
 
 function postTaskFile(pub, store) {
@@ -35,6 +36,13 @@ function postTaskFile(pub, store) {
           res.status(500).end();
           return;
         }
+
+        pub('app', new lang.TaskFileSet({
+          eventId: lang.newEventId(),
+          taskId: taskId,
+          fileId: fileId
+        }));
+
         res.send(task.toJS());
       });
     });
