@@ -1,6 +1,12 @@
 var lang = require('../lang');
 var debug = require('debug')('app:task:postTaskStart');
 
+function eventsOut() {
+  return [
+    lang.TaskStarted
+  ];
+}
+
 function postTaskStart(pub, store) {
   return function(req, res) {
     var taskId = req.params.taskId;
@@ -63,5 +69,6 @@ function postTaskStart(pub, store) {
 }
 
 module.exports = {
-  handler: postTaskStart
+  handler: postTaskStart,
+  eventsOut: eventsOut
 };

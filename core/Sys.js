@@ -75,29 +75,39 @@ Sys.prototype.print = function() {
           route = '';
         }
         httpEndpoints.push(method + ' /' + service + route);
-        var events = controller.events ? controller.events() : [];
-        for (i = 0; i < events.length; i++) {
-          eventsProduced.push(events[i].prototype._defaultValues.eventType);
+        var eventsOut = controller.eventsOut ? controller.eventsOut() : [];
+        for (i = 0; i < eventsOut.length; i++) {
+          eventsProduced.push(eventsOut[i].prototype._defaultValues.eventType);
         }
       },
       handleEvents: function(channel, controller) {
-        var events = controller.events ? controller.events() : [];
-        for (i = 0; i < events.length; i++) {
-          eventsConsumed.push(events[i].prototype._defaultValues.eventType);
+        var eventsIn = controller.eventsIn ? controller.eventsIn() : [];
+        for (i = 0; i < eventsIn.length; i++) {
+          eventsConsumed.push(eventsIn[i].prototype._defaultValues.eventType);
+        }
+        var eventsOut = controller.eventsOut ? controller.eventsOut() : [];
+        for (i = 0; i < eventsOut.length; i++) {
+          eventsProduced.push(eventsOut[i].prototype._defaultValues.eventType);
         }
       }
     });
-    console.log('  Events consumed:');
-    for (i = 0; i < eventsConsumed.length; i++) {
-      console.log('    - ' + eventsConsumed[i]);
+    if (eventsConsumed.length) {
+      console.log('  Events consumed:');
+      for (i = 0; i < eventsConsumed.length; i++) {
+        console.log('    - ' + eventsConsumed[i]);
+      }
     }
-    console.log('  HTTP endpoints:');
-    for (i = 0; i < httpEndpoints.length; i++) {
-      console.log('    - ' + httpEndpoints[i]);
+    if (httpEndpoints.length) {
+      console.log('  HTTP endpoints:');
+      for (i = 0; i < httpEndpoints.length; i++) {
+        console.log('    - ' + httpEndpoints[i]);
+      }
     }
-    console.log('  Events produced:');
-    for (i = 0; i < eventsProduced.length; i++) {
-      console.log('    - ' + eventsProduced[i]);
+    if (eventsProduced.length) {
+      console.log('  Events produced:');
+      for (i = 0; i < eventsProduced.length; i++) {
+        console.log('    - ' + eventsProduced[i]);
+      }
     }
     console.log('');
   }

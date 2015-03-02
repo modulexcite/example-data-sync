@@ -5,9 +5,16 @@ var Api = require('../lib/Api');
 
 var api = new Api({host: 'http://localhost:3000'});
 
-function events() {
+function eventsIn() {
   return [
     lang.TaskStarted
+  ];
+}
+
+function eventsOut() {
+  return [
+    lang.RawDataRejected,
+    lang.RawDataValidated
   ];
 }
 
@@ -89,5 +96,6 @@ function handler(pub, store) {
 
 module.exports = {
   handler: handler,
-  events: events
+  eventsIn: eventsIn,
+  eventsOut: eventsOut
 };

@@ -2,7 +2,7 @@ var Immutable = require('immutable');
 var lang = require('../lang');
 var debug = require('debug')('app:task:postTask');
 
-function events() {
+function eventsOut() {
   return [
     lang.TaskCreated
   ];
@@ -38,5 +38,5 @@ function postTask(pub, store) {
 
 module.exports = {
   handler: postTask,
-  events: events
+  eventsOut: eventsOut
 };

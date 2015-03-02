@@ -1,6 +1,12 @@
 var lang = require('../lang');
 var debug = require('debug')('app:task:postTaskFile');
 
+function eventsOut() {
+  return [
+    lang.TaskFileSet
+  ];
+}
+
 function postTaskFile(pub, store) {
   return function(req, res) {
     var taskId = req.params.taskId;
@@ -52,5 +58,6 @@ function postTaskFile(pub, store) {
 }
 
 module.exports = {
-  handler: postTaskFile
+  handler: postTaskFile,
+  eventsOut: eventsOut
 };

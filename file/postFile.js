@@ -1,7 +1,7 @@
 var lang = require('../lang');
 var debug = require('debug')('app:file:postFile');
 
-function events() {
+function eventsOut() {
   return [
     lang.FileUploaded
   ];
@@ -48,6 +48,6 @@ function postFile(pub, store) {
 }
 
 module.exports = {
-  events: events,
-  handler: postFile
+  handler: postFile,
+  eventsOut: eventsOut
 };
