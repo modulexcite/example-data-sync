@@ -31,6 +31,14 @@ var StatusMapping = {
   }
 };
 
+var EventMapping = {
+  'task-created': 'Task created',
+  'task-file-set': 'File uploaded to task',
+  'task-started': 'Task started',
+  'raw-data-rejected': 'Raw data validation failed',
+  'raw-data-validated': 'Raw data validation succeeded'
+};
+
 var TaskHistory = React.createClass({
   getInitialState: function() {
     return {
@@ -67,9 +75,10 @@ var TaskHistory = React.createClass({
     }
 
     var status = StatusMapping[task.get('status')];
+    var eventNodes = task.get('history').map(this.renderTaskEvent).toJS();
 
     return (
-      <div key={task.get('taskId')}>
+      <div key={task.get('taskId')} style={{marginBottom: 20}}>
         <div><strong>{info.get('name')}</strong></div>
         <div>
           <span>Status: </span>
@@ -82,7 +91,10 @@ var TaskHistory = React.createClass({
         </div>
         <div>{'Task ID: ' + task.get('taskId')}</div>
         {this.renderTaskFile(task)}
-        <br/>
+        <div><strong>History:</strong></div>
+        <ul style={{margin: 0}}>
+          {eventNodes}
+        </ul>
       </div>
     );
   },
@@ -111,6 +123,15 @@ var TaskHistory = React.createClass({
       <div>
         <a href={href} target="_blank">Download raw data file</a>
       </div>
+    );
+  },
+
+  renderTaskEvent: function(event) {
+    var name = EventMapping[event.get('eventType')] || 'Unknown event';
+    return (
+      <li key={event.get('eventId')}>
+        {name + ' (' + event.get('timestamp') + ')'}
+      </li>
     );
   },
 
