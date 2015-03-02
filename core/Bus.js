@@ -1,5 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var Immutable = require('immutable');
+var timestamp = require('./timestamp');
 var debug = require('debug')('app:bus');
 
 function Bus() {
@@ -10,6 +11,9 @@ function Bus() {
 Bus.prototype.publish = function(channel, event) {
   debug('publish ' + channel + '/' + event.get('eventType') + ' ' + JSON.stringify(event));
   this._ensureChannel(channel);
+  if (!event.get('timestamp')) {
+    event = event.set('timestamp', timestamp.now());
+  }
   this._channels[channel].push(event);
   this._emitter.emit(channel, event);
 };

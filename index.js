@@ -5,6 +5,7 @@ var sys = new Sys();
 sys.addService('task', require('./task'));
 sys.addService('file', require('./file'));
 sys.addService('transform', require('./transform'));
+sys.addService('history', require('./history'));
 sys.addService('app', require('./app'));
 
 sys.redirect('/', '/app');
