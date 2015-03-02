@@ -52,8 +52,8 @@ function postTaskStart(pub, store) {
         pub('app', new lang.TaskStarted({
           eventId: lang.newEventId(),
           taskId: taskId,
-          type: task.get('type'),
-          meta: task.get('meta')
+          taskType: task.get('type'),
+          taskMeta: task.get('meta')
         }));
 
         res.send(task.toJS());

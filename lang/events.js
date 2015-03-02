@@ -40,9 +40,29 @@ var TaskStarted = Immutable.Record({
   taskMeta: null
 });
 
+var RawDataRejected = Immutable.Record({
+  eventId: null,
+  eventType: 'raw-data-rejected',
+  timestamp: null,
+  taskId: null,
+  userId: null,
+  reasonName: null,
+  reasonMessage: null
+});
+
+var RawDataValidated = Immutable.Record({
+  eventId: null,
+  eventType: 'raw-data-validated',
+  timestamp: null,
+  taskId: null,
+  userId: null
+});
+
 module.exports = {
   TaskCreated: TaskCreated,
   FileUploaded: FileUploaded,
   TaskFileSet: TaskFileSet,
-  TaskStarted: TaskStarted
+  TaskStarted: TaskStarted,
+  RawDataRejected: RawDataRejected,
+  RawDataValidated: RawDataValidated
 };
