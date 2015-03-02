@@ -20,7 +20,10 @@ function postTaskFile(pub, store) {
         });
         return;
       }
-      if (task.getIn(['meta', 'fileId'])) {
+
+      var fileId = req.body.fileId;
+      var existingFileId = task.getIn(['meta', 'fileId']);
+      if (existingFileId && existingFileId !== fileId) {
         res.status(409).send({
           error: {
             name: 'TaskAlreadyHasFile',
@@ -30,7 +33,6 @@ function postTaskFile(pub, store) {
         return;
       }
 
-      var fileId = req.body.fileId;
       store.setTaskFile(taskId, fileId, function(err, task) {
         if (err) {
           res.status(500).end();

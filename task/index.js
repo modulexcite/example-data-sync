@@ -5,5 +5,5 @@ module.exports = function(sys) {
   sys.handleHttp('POST', '/', require('./postTask'));
   sys.handleHttp('GET', '/:taskId', require('./getTask'));
   sys.handleHttp('POST', '/:taskId/file', require('./postTaskFile'));
-  sys.handleEvents('app', require('./eventHandler'));
+  sys.handleHttp('POST', '/:taskId/start', require('./postTaskStart'));
 };

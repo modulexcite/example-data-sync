@@ -138,13 +138,22 @@ var NewSyncTask = React.createClass({
     if (!(task && task.getIn(['meta', 'fileId']))) {
       return null;
     }
+    if (task.get('started')) {
+      return <p style={{color: 'green'}}>Task started</p>;
+    }
 
     return <p><button onClick={this.handleStartTask}>Start task</button></p>;
   },
 
   handleStartTask: function(e) {
+    var self = this;
     e.preventDefault();
-    console.log('start task');
+    api.startTask(this.state.task.get('taskId'), function(err, task) {
+      if (err) {
+        return;
+      }
+      self.setState({task: task});
+    });
   }
 });
 

@@ -41,9 +41,6 @@ Sys.prototype.start = function() {
         router[method.toLowerCase()](route, controller.handler(pub, stores[service]));
       },
       handleEvents: function(channel, controller) {
-        if (!stores[service]) {
-          debug('WARNING: Added event handler but no store for service ' + service);
-        }
         bus.subscribe(channel, controller.handler(pub, stores[service]));
       }
     });

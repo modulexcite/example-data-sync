@@ -29,8 +29,20 @@ var TaskFileSet = Immutable.Record({
   fileId: null
 });
 
+var TaskStarted = Immutable.Record({
+  eventId: null,
+  eventType: 'task-started',
+  timestamp: null,
+  taskId: null,
+  userId: null,
+  bucketId: null,
+  taskType: null,
+  taskMeta: null
+});
+
 module.exports = {
   TaskCreated: TaskCreated,
   FileUploaded: FileUploaded,
-  TaskFileSet: TaskFileSet
+  TaskFileSet: TaskFileSet,
+  TaskStarted: TaskStarted
 };

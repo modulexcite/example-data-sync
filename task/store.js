@@ -23,4 +23,14 @@ Store.prototype.setTaskFile = function(taskId, fileId, cb) {
   cb(null, task);
 };
 
+Store.prototype.setTaskAsStarted = function(taskId, cb) {
+  var task = this._state.get(taskId);
+  if (!task) {
+    return cb();
+  }
+  task = task.set('started', true);
+  this._state = this._state.set(task.get('taskId'), task);
+  cb(null, task);
+};
+
 module.exports = Store;
