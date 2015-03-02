@@ -16,9 +16,18 @@ var NewSyncTask = React.createClass({
   componentWillMount: function() {
     var self = this;
     var qs = queryString.parse(window.location.search);
-
     var taskId = qs.taskId;
-    if (taskId) {
+    var fileId = qs.fileId;
+
+    if (taskId && fileId) {
+      this.setState({task: Immutable.Map({taskId: taskId})});
+      api.setTaskFile(taskId, fileId, function(err, task) {
+        if (err) {
+          return;
+        }
+        self.setState({task: task});
+      });
+    } else if (taskId) {
       this.setState({task: Immutable.Map({taskId: taskId})});
       api.getTask(taskId, function(err, task) {
         if (err) {
@@ -28,7 +37,6 @@ var NewSyncTask = React.createClass({
       });
     }
 
-    var fileId = qs.fileId;
     if (fileId) {
       this.setState({file: Immutable.Map({fileId: fileId})});
       api.getFileMeta(fileId, function(err, fileMeta) {
@@ -37,15 +45,6 @@ var NewSyncTask = React.createClass({
         }
         var file = self.state.file.set('meta', fileMeta);
         self.setState({file: file});
-      });
-    }
-
-    if (taskId && fileId) {
-      api.setTaskFile(taskId, fileId, function(err, task) {
-        if (err) {
-          return;
-        }
-        self.setState({task: task});
       });
     }
   },
