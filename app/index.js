@@ -8,7 +8,7 @@ module.exports = function(sys) {
   sys.useMiddleware('/public', express.static(
     path.join(__dirname, '..', 'build')
   ));
-  sys.handleHttp('GET', '/', {
+  sys.handleHttp('GET', '*', {
     handler: function() {
       return function(req, res) { res.send(html); };
     }
