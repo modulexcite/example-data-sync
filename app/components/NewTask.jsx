@@ -1,6 +1,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 var Router = require('react-router');
+var Link = Router.Link;
 var queryString = require('qs');
 var api = require('../api');
 
@@ -140,7 +141,12 @@ var NewTask = React.createClass({
       return null;
     }
     if (task.get('started')) {
-      return <p style={{color: 'green'}}>Task started</p>;
+      return (
+        <div>
+          <p style={{color: 'green'}}>Task started</p>
+          <p><Link to="tasks">See task progress</Link></p>
+        </div>
+      );
     }
 
     return <p><button onClick={this.handleStartTask}>Start task</button></p>;
