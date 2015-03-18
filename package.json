@@ -18,6 +18,7 @@
     "immutable": "3.6.4",
     "jsx-loader": "0.12.2",
     "multer": "0.1.8",
+    "nedb": "1.1.1",
     "node-jsx": "0.12.4",
     "object-assign": "2.0.0",
     "qs": "2.4.1",
