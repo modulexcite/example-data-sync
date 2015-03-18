@@ -8,22 +8,16 @@ function Sys(options) {
   this._bus = options.bus;
   this._services = {};
   this._routers = {};
-  this._dbs = {};
   this._stores = {};
 }
 
-Sys.prototype.addService = function(name, service, options) {
-  options = options || {};
+Sys.prototype.addService = function(name, service) {
   this._services[name] = service;
-  if (options.db) {
-    this._dbs[name] = options.db;
-  }
 };
 
 Sys.prototype.start = function() {
   var bus = this._bus;
   var pub = bus.publish.bind(bus);
-  var dbs = this._dbs;
   var stores = this._stores;
   var server = this._server;
   var router;
@@ -32,7 +26,7 @@ Sys.prototype.start = function() {
     this._routers[service] = router;
     this._services[service]({
       useStore: function(Store) {
-        stores[service] = new Store(dbs[service]);
+        stores[service] = new Store();
       },
       useMiddleware: function(route, middleware) {
         if (!middleware) {
