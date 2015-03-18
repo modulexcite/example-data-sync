@@ -1,11 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var debug = require('debug')('app:sys');
-var Bus = require('./Bus');
 
-function Sys() {
+function Sys(options) {
   this._server = express();
-  this._bus = new Bus();
+  this._server.use(bodyParser.json());
+  this._bus = options.bus;
   this._services = {};
   this._routers = {};
   this._stores = {};
@@ -20,7 +20,6 @@ Sys.prototype.start = function() {
   var pub = bus.publish.bind(bus);
   var stores = this._stores;
   var server = this._server;
-  server.use(bodyParser.json());
   var router;
   for (var service in this._services) {
     router = express.Router();

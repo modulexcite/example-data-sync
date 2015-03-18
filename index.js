@@ -1,6 +1,9 @@
+var Bus = require('./core/Bus');
 var Sys = require('./core/Sys');
 
-var sys = new Sys();
+var bus = new Bus();
+
+var sys = new Sys({bus: bus});
 
 sys.addService('task', require('./task'));
 sys.addService('file', require('./file'));
