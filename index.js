@@ -1,7 +1,10 @@
 var Bus = require('./core/Bus');
 var Sys = require('./core/Sys');
 
-var bus = new Bus();
+var bus = new Bus({
+  dirname: 'data',
+  inMemoryOnly: false
+});
 
 var sys = new Sys({bus: bus});
 
