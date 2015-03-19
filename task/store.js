@@ -6,7 +6,7 @@ function Store() {
 
 Store.prototype.addTask = function(task, cb) {
   this._state = this._state.set(task.get('taskId'), task);
-  cb();
+  cb(null, task);
 };
 
 Store.prototype.getTask = function(taskId, cb) {

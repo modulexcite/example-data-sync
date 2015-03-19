@@ -8,5 +8,6 @@ module.exports = function(options) {
     sys.handleHttp('POST', '/', require('./postFile'));
     sys.handleHttp('GET', '/:fileId/meta', require('./getFileMeta'));
     sys.handleHttp('GET', '/:fileId', require('./getFile')(options));
+    sys.denormalize('app', require('./denormalizer'), {subscribe: false});
   };
 };

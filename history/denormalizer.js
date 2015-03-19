@@ -1,6 +1,6 @@
 var Immutable = require('immutable');
 var lang = require('../lang');
-var debug = require('debug')('app:history:eventHandler');
+var debug = require('debug')('app:history:denormalizer');
 
 function eventsIn() {
   return [
@@ -12,11 +12,12 @@ function eventsIn() {
   ];
 }
 
-function handler(pub, store) {
-  return function(event) {
+function handler(store) {
+  return function(event, cb) {
+    cb = cb || function noop() {};
     var updates;
     if (event instanceof lang.TaskCreated) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({
         status: 'pending',
         type: event.get('taskType'),
@@ -25,23 +26,23 @@ function handler(pub, store) {
         meta: event.get('taskMeta')
       });
     } else if (event instanceof lang.TaskFileSet) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({
         status: 'pending',
         meta: Immutable.Map({fileId: event.get('fileId')})
       });
     } else if (event instanceof lang.TaskStarted) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({status: 'running'});
     } else if (event instanceof lang.RawDataRejected) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({
         status: 'failed',
         reasonName: event.get('reasonName'),
         reasonMessage: event.get('reasonMessage')
       });
     } else if (event instanceof lang.RawDataValidated) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({status: 'running'});
     }
 
@@ -55,9 +56,12 @@ function handler(pub, store) {
       store.updateTaskWithEvent(taskId, updates, shortEvent, function(err) {
         if (err) {
           debug('ERROR' + err);
-          return;
+          return cb(err);
         }
+        cb();
       });
+    } else {
+      cb();
     }
   };
 }

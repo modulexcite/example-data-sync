@@ -1,4 +1,5 @@
 var lang = require('../lang');
+var denormalizer = require('./denormalizer');
 var debug = require('debug')('app:task:postTaskFile');
 
 function eventsOut() {
@@ -8,6 +9,8 @@ function eventsOut() {
 }
 
 function postTaskFile(pub, store) {
+  var denormalize = denormalizer.handler(store);
+
   return function(req, res) {
     var taskId = req.params.taskId;
     debug('POST /task/:taskId/file ' + taskId);
@@ -39,19 +42,21 @@ function postTaskFile(pub, store) {
         return;
       }
 
-      store.setTaskFile(taskId, fileId, function(err, task) {
+      var taskFileSet = new lang.TaskFileSet({
+        eventId: lang.newEventId(),
+        taskId: taskId,
+        fileId: fileId
+      });
+
+      denormalize(taskFileSet, function(err, task) {
         if (err) {
           res.status(500).end();
           return;
         }
 
-        pub('app', new lang.TaskFileSet({
-          eventId: lang.newEventId(),
-          taskId: taskId,
-          fileId: fileId
-        }));
+        pub('app', taskFileSet);
 
-        res.send(task.toJS());
+        res.send(task);
       });
     });
   };

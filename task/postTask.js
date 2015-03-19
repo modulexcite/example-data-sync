@@ -1,5 +1,6 @@
 var Immutable = require('immutable');
 var lang = require('../lang');
+var denormalizer = require('./denormalizer');
 var debug = require('debug')('app:task:postTask');
 
 function eventsOut() {
@@ -9,27 +10,25 @@ function eventsOut() {
 }
 
 function postTask(pub, store) {
+  var denormalize = denormalizer.handler(store);
+
   return function(req, res) {
     debug('POST /task ' + JSON.stringify(req.body));
-    var taskId = lang.newTaskId();
-    var task = Immutable.fromJS({
-      taskId: taskId,
-      type: req.body.type,
-      meta: req.body.meta || {}
+
+    var taskCreated = new lang.TaskCreated({
+      eventId: lang.newEventId(),
+      taskId: lang.newTaskId(),
+      taskType: req.body.type,
+      taskMeta: Immutable.Map(req.body.meta || {})
     });
 
-    store.addTask(task, function(err) {
+    denormalize(taskCreated, function(err, task) {
       if (err) {
         res.status(500).end();
         return;
       }
 
-      pub('app', new lang.TaskCreated({
-        eventId: lang.newEventId(),
-        taskId: taskId,
-        taskType: task.get('type'),
-        taskMeta: task.get('meta')
-      }));
+      pub('app', taskCreated);
 
       res.status(201).send(task);
     });

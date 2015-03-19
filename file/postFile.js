@@ -1,4 +1,5 @@
 var lang = require('../lang');
+var denormalizer = require('./denormalizer');
 var debug = require('debug')('app:file:postFile');
 
 function eventsOut() {
@@ -8,6 +9,8 @@ function eventsOut() {
 }
 
 function postFile(pub, store) {
+  var denormalize = denormalizer.handler(store);
+
   return function(req, res, next) {
     var file = req.files['file'];
     if (!file) {
@@ -24,16 +27,19 @@ function postFile(pub, store) {
       size: file.size
     });
 
-    store.addFileMeta(fileId, fileMeta, function(err) {
+    var fileUploaded = new lang.FileUploaded({
+      eventId: lang.newEventId(),
+      fileId: fileId,
+      fileMeta: fileMeta
+    });
+
+    denormalize(fileUploaded, function(err) {
       if (err) {
         res.status(500).end();
         return;
       }
-      pub('app', new lang.FileUploaded({
-        eventId: lang.newEventId(),
-        fileId: fileId,
-        fileMeta: fileMeta
-      }));
+
+      pub('app', fileUploaded);
 
       var redirect = req.query.redirect;
       if (redirect) {

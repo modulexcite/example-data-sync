@@ -25,5 +25,12 @@ var command = process.argv[process.argv.length - 1];
 if (command === 'print') {
   sys.print();
 } else {
-  sys.start();
+  sys.wireServices();
+  sys.replayEvents('app', function(err) {
+    if (err) {
+      console.log('ERROR replaying events ' + err);
+      return;
+    }
+    sys.startServer();
+  });
 }

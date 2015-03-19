@@ -59,7 +59,7 @@ function handler(pub, store) {
   return function(event) {
     var transform;
     if (event instanceof lang.TaskStarted) {
-      debug('handle ' + event.get('eventType') + ' ' + JSON.stringify(event.toJS()));
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       transform = transforms[event.get('taskType')];
     }
 

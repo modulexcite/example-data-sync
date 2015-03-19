@@ -1,4 +1,5 @@
 var lang = require('../lang');
+var denormalizer = require('./denormalizer');
 var debug = require('debug')('app:task:postTaskStart');
 
 function eventsOut() {
@@ -8,6 +9,8 @@ function eventsOut() {
 }
 
 function postTaskStart(pub, store) {
+  var denormalize = denormalizer.handler(store);
+
   return function(req, res) {
     var taskId = req.params.taskId;
     debug('POST /task/:taskId/start ' + taskId);
@@ -49,20 +52,22 @@ function postTaskStart(pub, store) {
         return;
       }
 
-      store.setTaskAsStarted(taskId, function(err, task) {
+      var taskStarted = new lang.TaskStarted({
+        eventId: lang.newEventId(),
+        taskId: taskId,
+        taskType: task.get('type'),
+        taskMeta: task.get('meta')
+      });
+
+      denormalize(taskStarted, function(err, task) {
         if (err) {
           res.status(500).end();
           return;
         }
 
-        pub('app', new lang.TaskStarted({
-          eventId: lang.newEventId(),
-          taskId: taskId,
-          taskType: task.get('type'),
-          taskMeta: task.get('meta')
-        }));
+        pub('app', taskStarted);
 
-        res.send(task.toJS());
+        res.send(task);
       });
     });
   };
