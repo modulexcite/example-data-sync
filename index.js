@@ -15,7 +15,9 @@ sys.addService('task', require('./task'));
 sys.addService('file', require('./file')({
   dirname: path.join(DATA_DIR, 'files')
 }));
-sys.addService('transform', require('./transform'));
+sys.addService('transform', require('./transform')({
+  dirname: path.join(DATA_DIR, 'blobs')
+}));
 sys.addService('history', require('./history'));
 sys.addService('app', require('./app'));
 

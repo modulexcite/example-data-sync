@@ -82,3 +82,12 @@ exports.DataRecordsTranslated = Immutable.Record({
   taskId: null,
   userId: null
 });
+
+exports.TransformCompleted = Immutable.Record({
+  eventId: null,
+  eventType: 'transform-completed',
+  timestamp: null,
+  taskId: null,
+  userId: null,
+  blobId: null
+});

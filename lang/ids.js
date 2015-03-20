@@ -11,3 +11,7 @@ exports.newTaskId = function newTaskId() {
 exports.newFileId = function newFileId() {
   return id.newId();
 };
+
+exports.newBlobId = function newBlobId() {
+  return id.newId();
+};

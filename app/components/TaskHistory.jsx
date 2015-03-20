@@ -39,7 +39,8 @@ var EventMapping = {
   'raw-data-validated': 'Raw data validation succeeded',
   'raw-data-parsed': 'Raw data parsed',
   'data-records-identified': 'Data records identified',
-  'data-records-translated': 'Data records translated'
+  'data-records-translated': 'Data records translated',
+  'transform-completed': 'Raw data transform completed'
 };
 
 var TaskHistory = React.createClass({
@@ -95,6 +96,7 @@ var TaskHistory = React.createClass({
         </div>
         <div>{'Task ID: ' + task.get('taskId')}</div>
         {this.renderTaskFile(task)}
+        {this.renderTaskBlob(task)}
         <div><strong>History:</strong></div>
         <ul style={{margin: 0}}>
           {eventNodes}
@@ -134,6 +136,19 @@ var TaskHistory = React.createClass({
     return (
       <div>
         <a href={href} target="_blank">Download raw data file</a>
+      </div>
+    );
+  },
+
+  renderTaskBlob: function(task) {
+    var blobId = task.get('blobId');
+    if (!blobId) {
+      return null;
+    }
+    var href = 'http://localhost:3000/transform/blob/' + blobId;
+    return (
+      <div>
+        <a href={href} target="_blank">Download transformed data</a>
       </div>
     );
   },
