@@ -50,6 +50,9 @@ function handler(store) {
         status: 'running',
         recordCount: event.get('recordCount')
       });
+    } else if (event instanceof lang.DataRecordsIdentified) {
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
+      updates = Immutable.Map({status: 'running'});
     }
 
     if (updates) {

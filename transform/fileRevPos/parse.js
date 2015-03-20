@@ -15,6 +15,7 @@ module.exports = function parse(data, cb) {
   data = data.map(function(row) {
     return header.reduce(function(acc, field, index) {
       var value = row[index];
+      // Type-case some values
       if (!value.length) {
         value = null;
       }

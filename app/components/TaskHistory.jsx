@@ -37,7 +37,8 @@ var EventMapping = {
   'task-started': 'Task started',
   'raw-data-rejected': 'Raw data validation failed',
   'raw-data-validated': 'Raw data validation succeeded',
-  'raw-data-parsed': 'Raw data parsed'
+  'raw-data-parsed': 'Raw data parsed',
+  'data-records-identified': 'Data records identified'
 };
 
 var TaskHistory = React.createClass({

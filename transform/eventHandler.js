@@ -30,7 +30,8 @@ function handler(pub, store) {
     }
 
     if (transform) {
-      transform.getData(event.get('taskMeta'), function(err, rawData) {
+      var taskMeta = event.get('taskMeta');
+      transform.getData(taskMeta, function(err, rawData) {
         if (err) {
           debug('ERROR' + err);
           return;
@@ -71,6 +72,20 @@ function handler(pub, store) {
                 recordCount: parsedData.count()
               }));
             }, 0);
+
+            transform.identify(taskMeta, parsedData, function(err, identifiedData) {
+              if (err) {
+                debug('ERROR' + err);
+                return;
+              }
+
+              setTimeout(function() {
+                pub('app', new lang.DataRecordsIdentified({
+                  eventId: lang.newEventId(),
+                  taskId: event.get('taskId')
+                }));
+              }, 0);
+            });
           });
         });
       });

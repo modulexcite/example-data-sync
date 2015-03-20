@@ -66,3 +66,11 @@ exports.RawDataParsed = Immutable.Record({
   userId: null,
   recordCount: null
 });
+
+exports.DataRecordsIdentified = Immutable.Record({
+  eventId: null,
+  eventType: 'data-records-identified',
+  timestamp: null,
+  taskId: null,
+  userId: null
+});
