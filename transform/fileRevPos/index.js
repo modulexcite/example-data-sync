@@ -3,6 +3,7 @@ module.exports = function(api) {
     getData: require('./getData')(api),
     validate: require('./validate'),
     parse: require('./parse'),
-    identify: require('./identify')
+    identify: require('./identify'),
+    translate: require('./translate')
   };
 };

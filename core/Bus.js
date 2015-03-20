@@ -64,6 +64,7 @@ Bus.prototype.replay = function(channel, handler, cb) {
         if (EventRecord) {
           return new EventRecord(event);
         } else {
+          debug('WARNING: Unrecognized event ' + event);
           return null;
         }
       });

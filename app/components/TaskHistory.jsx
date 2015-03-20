@@ -38,7 +38,8 @@ var EventMapping = {
   'raw-data-rejected': 'Raw data validation failed',
   'raw-data-validated': 'Raw data validation succeeded',
   'raw-data-parsed': 'Raw data parsed',
-  'data-records-identified': 'Data records identified'
+  'data-records-identified': 'Data records identified',
+  'data-records-translated': 'Data records translated'
 };
 
 var TaskHistory = React.createClass({

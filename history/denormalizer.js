@@ -53,6 +53,9 @@ function handler(store) {
     } else if (event instanceof lang.DataRecordsIdentified) {
       debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({status: 'running'});
+    } else if (event instanceof lang.DataRecordsTranslated) {
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
+      updates = Immutable.Map({status: 'running'});
     }
 
     if (updates) {

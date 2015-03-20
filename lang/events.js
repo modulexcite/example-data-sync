@@ -74,3 +74,11 @@ exports.DataRecordsIdentified = Immutable.Record({
   taskId: null,
   userId: null
 });
+
+exports.DataRecordsTranslated = Immutable.Record({
+  eventId: null,
+  eventType: 'data-records-translated',
+  timestamp: null,
+  taskId: null,
+  userId: null
+});

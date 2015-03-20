@@ -85,6 +85,20 @@ function handler(pub, store) {
                   taskId: event.get('taskId')
                 }));
               }, 0);
+
+              transform.translate(taskMeta, identifiedData, function(err, translatedData) {
+                if (err) {
+                  debug('ERROR' + err);
+                  return;
+                }
+
+                setTimeout(function() {
+                  pub('app', new lang.DataRecordsTranslated({
+                    eventId: lang.newEventId(),
+                    taskId: event.get('taskId')
+                  }));
+                }, 0);
+              });
             });
           });
         });
