@@ -36,7 +36,8 @@ var EventMapping = {
   'task-file-set': 'File uploaded to task',
   'task-started': 'Task started',
   'raw-data-rejected': 'Raw data validation failed',
-  'raw-data-validated': 'Raw data validation succeeded'
+  'raw-data-validated': 'Raw data validation succeeded',
+  'raw-data-parsed': 'Raw data parsed'
 };
 
 var TaskHistory = React.createClass({
@@ -86,6 +87,7 @@ var TaskHistory = React.createClass({
         </div>
         {this.renderTaskErrorMessage(task)}
         <div>{info.get('description')}</div>
+        {this.renderTaskRecordCount(task)}
         <div>
           {'Last updated on: ' + task.get('history').first().get('timestamp')}
         </div>
@@ -111,6 +113,14 @@ var TaskHistory = React.createClass({
         <span style={{color: 'red'}}>{message}</span>
       </div>
     );
+  },
+
+  renderTaskRecordCount: function(task) {
+    var recordCount = task.get('recordCount', null);
+    if (recordCount === null) {
+      return null;
+    }
+    return <div>{'Record count: ' + recordCount}</div>;
   },
 
   renderTaskFile: function(task) {

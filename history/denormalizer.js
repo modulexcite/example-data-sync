@@ -44,6 +44,12 @@ function handler(store) {
     } else if (event instanceof lang.RawDataValidated) {
       debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
       updates = Immutable.Map({status: 'running'});
+    } else if (event instanceof lang.RawDataParsed) {
+      debug('handle ' + event.get('eventType') + ' ' + event.get('eventId'));
+      updates = Immutable.Map({
+        status: 'running',
+        recordCount: event.get('recordCount')
+      });
     }
 
     if (updates) {

@@ -1,4 +1,3 @@
-var Immutable = require('immutable');
 var lang = require('../lang');
 var debug = require('debug')('app:transform:eventHandler');
 var Api = require('../lib/Api');
@@ -19,40 +18,7 @@ function eventsOut() {
 }
 
 var transforms = {
-  'file-rev-pos': {
-    getData: function(taskMeta, cb) {
-      api.getFile(taskMeta.get('fileId'), cb);
-    },
-
-    validate: function(data, cb) {
-      if (!data) {
-        cb(null, Immutable.fromJS({
-          isValid: false,
-          reason: {
-            name: 'EmptyData',
-            message: 'Raw data is empty'
-          }
-        }));
-        return;
-      }
-
-      var hasHeader = data.match(
-        /^transaction_id,datetime,customer_id,payment/
-      );
-      if (!hasHeader) {
-        cb(null, Immutable.fromJS({
-          isValid: false,
-          reason: {
-            name: 'NoHeaderFound',
-            message: 'Expected first line to be "transaction_id,datetime,customer_id,payment"'
-          }
-        }));
-        return;
-      }
-
-      cb(null, Immutable.Map({isValid: true}));
-    }
-  }
+  'file-rev-pos': require('./fileRevPos')(api)
 };
 
 function handler(pub, store) {
@@ -64,14 +30,15 @@ function handler(pub, store) {
     }
 
     if (transform) {
-      transform.getData(event.get('taskMeta'), function(err, data) {
+      transform.getData(event.get('taskMeta'), function(err, rawData) {
         if (err) {
           debug('ERROR' + err);
           return;
         }
-        transform.validate(data, function(err, result) {
+        transform.validate(rawData, function(err, result) {
           if (err) {
             debug('ERROR' + err);
+            return;
           }
 
           if (!result.get('isValid')) {
@@ -88,6 +55,23 @@ function handler(pub, store) {
             eventId: lang.newEventId(),
             taskId: event.get('taskId')
           }));
+
+          transform.parse(rawData, function(err, parsedData) {
+            if (err) {
+              debug('ERROR' + err);
+              return;
+            }
+
+            // HACK: Bus using EventEmitter but not guaranteeing order
+            // of events ("parsed" is received before "validated" by history)
+            setTimeout(function() {
+              pub('app', new lang.RawDataParsed({
+                eventId: lang.newEventId(),
+                taskId: event.get('taskId'),
+                recordCount: parsedData.count()
+              }));
+            }, 0);
+          });
         });
       });
     }

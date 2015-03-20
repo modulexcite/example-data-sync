@@ -1,19 +1,13 @@
 var id = require('../core/id');
 
-function newEventId() {
+exports.newEventId = function newEventId() {
   return id.newId();
-}
+};
 
-function newTaskId() {
+exports.newTaskId = function newTaskId() {
   return id.newId();
-}
+};
 
-function newFileId() {
+exports.newFileId = function newFileId() {
   return id.newId();
-}
-
-module.exports = {
-  newEventId: newEventId,
-  newTaskId: newTaskId,
-  newFileId: newFileId
 };

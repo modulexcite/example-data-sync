@@ -1,6 +1,6 @@
 var Immutable = require('immutable');
 
-var TaskCreated = Immutable.Record({
+exports.TaskCreated = Immutable.Record({
   eventId: null,
   eventType: 'task-created',
   timestamp: null,
@@ -11,7 +11,7 @@ var TaskCreated = Immutable.Record({
   taskMeta: null
 });
 
-var FileUploaded = Immutable.Record({
+exports.FileUploaded = Immutable.Record({
   eventId: null,
   eventType: 'file-uploaded',
   timestamp: null,
@@ -20,7 +20,7 @@ var FileUploaded = Immutable.Record({
   fileMeta: null
 });
 
-var TaskFileSet = Immutable.Record({
+exports.TaskFileSet = Immutable.Record({
   eventId: null,
   eventType: 'task-file-set',
   timestamp: null,
@@ -29,7 +29,7 @@ var TaskFileSet = Immutable.Record({
   fileId: null
 });
 
-var TaskStarted = Immutable.Record({
+exports.TaskStarted = Immutable.Record({
   eventId: null,
   eventType: 'task-started',
   timestamp: null,
@@ -40,7 +40,7 @@ var TaskStarted = Immutable.Record({
   taskMeta: null
 });
 
-var RawDataRejected = Immutable.Record({
+exports.RawDataRejected = Immutable.Record({
   eventId: null,
   eventType: 'raw-data-rejected',
   timestamp: null,
@@ -50,7 +50,7 @@ var RawDataRejected = Immutable.Record({
   reasonMessage: null
 });
 
-var RawDataValidated = Immutable.Record({
+exports.RawDataValidated = Immutable.Record({
   eventId: null,
   eventType: 'raw-data-validated',
   timestamp: null,
@@ -58,11 +58,11 @@ var RawDataValidated = Immutable.Record({
   userId: null
 });
 
-module.exports = {
-  TaskCreated: TaskCreated,
-  FileUploaded: FileUploaded,
-  TaskFileSet: TaskFileSet,
-  TaskStarted: TaskStarted,
-  RawDataRejected: RawDataRejected,
-  RawDataValidated: RawDataValidated
-};
+exports.RawDataParsed = Immutable.Record({
+  eventId: null,
+  eventType: 'raw-data-parsed',
+  timestamp: null,
+  taskId: null,
+  userId: null,
+  recordCount: null
+});
