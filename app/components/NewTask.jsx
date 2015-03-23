@@ -6,7 +6,9 @@ var queryString = require('qs');
 var api = require('../api');
 
 var NewTask = React.createClass({
-  mixins: [Router.State, Router.Navigation],
+  contextTypes: {
+    router: React.PropTypes.func.isRequired
+  },
 
   getInitialState: function() {
     return {
@@ -17,7 +19,7 @@ var NewTask = React.createClass({
 
   componentWillMount: function() {
     var self = this;
-    var query = this.getQuery();
+    var query = this.context.router.getCurrentQuery();
     var taskId = query.taskId;
     var fileId = query.fileId;
 
@@ -128,7 +130,7 @@ var NewTask = React.createClass({
     }
 
     var href = 'http://localhost:3000/file?';
-    var redirect = location.origin + this.makeHref(
+    var redirect = location.origin + this.context.router.makeHref(
       'task-new', {}, {taskId: task.get('taskId')}
     );
     href += queryString.stringify({redirect: redirect});
